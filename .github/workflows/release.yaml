@@ -6,38 +6,6 @@ on:
 name: deploy
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Checkout sources
-      uses: actions/checkout@v3
-
-    - run: sudo apt-get update
-    - name: Install deps
-      run: sudo apt-get install musl-dev musl-tools
-
-    - name: Install rust toolchain
-      uses: hecrj/setup-rust-action@v1
-      with:
-        targets: x86_64-unknown-linux-musl
-
-    - run: ./build_connectors.sh
-    - run: ./push_connectors.sh
-
-    - uses: withlogicco/setup-compose-cli@v1
-    - run: docker context create ecs aws --from-env
-    - run: docker --context=aws compose up
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-
   play:
     runs-on: ubuntu-latest
     steps:
@@ -57,7 +25,6 @@ jobs:
 
     - name: Build android
       run: x build --platform android --arch arm64 --release
-      working-directory: dioxus-wallet
 
     - name: Install key
       run: echo "${{ secrets.JAVA_KEYSTORE }}" | base64 -d > keystore
@@ -92,7 +59,6 @@ jobs:
 
     - name: Build ios
       run: x build --platform ios --arch arm64 --release
-      working-directory: dioxus-wallet
       env:
         X_PEM: ${{ secrets.X_PEM }}
         X_PROVISIONING_PROFILE: ${{ secrets.X_PROVISIONING_PROFILE }}
