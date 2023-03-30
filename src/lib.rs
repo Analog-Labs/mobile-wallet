@@ -19,7 +19,7 @@ mod worker;
 pub extern "C" fn start_app() {
     android_logger::init_once(
         android_logger::Config::default()
-            .with_min_level(log::Level::Trace)
+            .with_max_level(log::LevelFilter::Trace)
             .with_tag("dioxus_wallet"),
     );
 

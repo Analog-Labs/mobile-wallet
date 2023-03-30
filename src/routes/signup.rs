@@ -17,7 +17,7 @@ pub enum Signup {
 #[allow(non_snake_case)]
 #[inline_props]
 pub fn Signup(cx: Scope) -> Element {
-    let step = use_state(&cx, || Signup::Intro);
+    let step = use_state(cx, || Signup::Intro);
     let component = match step.get() {
         Signup::Intro => rsx!(Intro {
             step_state: step.clone()
@@ -67,7 +67,7 @@ pub fn Intro(cx: Scope, step_state: UseState<Signup>) -> Element {
 pub fn Create(cx: Scope, step_state: UseState<Signup>) -> Element {
     let mnemonic = cx.use_hook(|| generate_mnemonic().unwrap());
     let mnemonic_string = mnemonic.to_string();
-    let alerts = use_atom_ref(&cx, ALERTS);
+    let alerts = use_atom_ref(cx, ALERTS);
     cx.render(rsx! {
         div {
             class:"content-container",
@@ -127,8 +127,8 @@ pub fn Create(cx: Scope, step_state: UseState<Signup>) -> Element {
 #[allow(non_snake_case)]
 #[inline_props]
 pub fn Recover(cx: Scope, step_state: UseState<Signup>) -> Element {
-    let mnemonic_string = use_state(&cx, || "".to_string());
-    let alerts = use_atom_ref(&cx, ALERTS);
+    let mnemonic_string = use_state(cx, || "".to_string());
+    let alerts = use_atom_ref(cx, ALERTS);
     cx.render(rsx! {
             div {
                 class:"content-container",

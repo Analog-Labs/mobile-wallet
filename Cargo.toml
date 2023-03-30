@@ -1,3 +1,6 @@
+[workspace]
+resolver = "2"
+
 [package]
 name = "dioxus-wallet"
 version = "0.1.7"

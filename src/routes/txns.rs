@@ -15,14 +15,14 @@ use rosetta_client::types::BlockTransaction;
 #[allow(non_snake_case)]
 
 pub fn Txns(cx: Scope) -> Element {
-    let chain = use_chain_from_route(&cx);
+    let chain = use_chain_from_route(cx);
     let info = chain.info();
     let icon = info.icon.to_str().unwrap();
-    let state = chain.use_state(&cx).read();
-    let alerts = use_atom_ref(&cx, ALERTS);
-    let router = use_router(&cx);
-    let loader_state = use_set(&cx, LOADER).clone();
-    let transactions_state: &UseRef<Vec<BlockTransaction>> = use_ref(&cx, Vec::new);
+    let state = chain.use_state(cx).read();
+    let alerts = use_atom_ref(cx, ALERTS);
+    let router = use_router(cx);
+    let loader_state = use_set(cx, LOADER).clone();
+    let transactions_state: &UseRef<Vec<BlockTransaction>> = use_ref(cx, Vec::new);
     cx.use_hook(|| {
         let alerts = alerts.clone();
         let transactions_state = transactions_state.clone();
