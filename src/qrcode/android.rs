@@ -11,7 +11,7 @@ pub fn scan_qrcode(_: &ScopeState) -> impl Future<Output = Result<String>> {
     async move {
         let context = ndk_context::android_context();
         let vm = unsafe { JavaVM::from_raw(context.vm().cast()) }?;
-        let env = vm.attach_current_thread()?;
+        let mut env = vm.attach_current_thread()?;
         let ctx = unsafe { JObject::from_raw(context.context().cast()) };
         let (tx, rx) = oneshot::channel();
         let tx = Box::into_raw(Box::new(tx));
@@ -22,13 +22,13 @@ pub fn scan_qrcode(_: &ScopeState) -> impl Future<Output = Result<String>> {
 
 #[no_mangle]
 pub unsafe extern "C" fn Java_com_example_dioxus_1wallet_MainActivity_onQrCodeScanned(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _class: JClass,
     tx: Box<oneshot::Sender<String>>,
     url: JString,
 ) {
     if let Err(err) = catch_unwind(AssertUnwindSafe(|| {
-        let url = env.get_string(url).unwrap();
+        let url = env.get_string(&url).unwrap();
         let url = url.to_str().unwrap();
         tx.send(url.into()).ok();
     })) {
