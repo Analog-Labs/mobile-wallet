@@ -5,6 +5,9 @@ resolver = "2"
 name = "dioxus-wallet"
 version = "0.1.7"
 edition = "2021"
+description = "Multi-chain mobile wallet."
+repository = "https://github.com/analog-labs/mobile-wallet"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
